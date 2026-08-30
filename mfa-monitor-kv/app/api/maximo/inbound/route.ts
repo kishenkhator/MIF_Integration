@@ -64,7 +64,8 @@ export async function GET(request: Request) {
     return NextResponse.json({ ok: true, record: records[0] });
   } catch (err) {
     const message = err instanceof Error ? err.message : 'Unknown server error';
-    return NextResponse.json({ ok: false, error: message }, { status: 500 });
+    const cause = err instanceof Error && err.cause ? String(err.cause) : undefined;
+    return NextResponse.json({ ok: false, error: message, cause }, { status: 500 });
   }
 }
 
@@ -165,6 +166,7 @@ export async function POST(request: Request) {
     return NextResponse.json({ ok: false, error: 'mode must be "create" or "update"' }, { status: 400 });
   } catch (err) {
     const message = err instanceof Error ? err.message : 'Unknown server error';
-    return NextResponse.json({ ok: false, error: message }, { status: 500 });
+    const cause = err instanceof Error && err.cause ? String(err.cause) : undefined;
+    return NextResponse.json({ ok: false, error: message, cause }, { status: 500 });
   }
 }
